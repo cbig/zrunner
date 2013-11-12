@@ -9,7 +9,7 @@ import sys
 import time
 
 from utilities import check_output_name, get_system_info, get_zonation_info, pad_header
-from zparser import parse_results
+from ztests.parser import parse_results
 
 
 def read_run(file_list, executable=None):
@@ -124,7 +124,7 @@ def write_output(output_data, output_file=None, silent=False, print_width=80):
 def main():
     parser = argparse.ArgumentParser(description='Run Zonation performance benchmarks.')
 
-    parser.add_argument('input_files', metavar='INPUTS', type=str, nargs='?',
+    parser.add_argument('input_files', metavar='INPUTS', type=str, nargs='+',
                         help='input bat/sh file')
     parser.add_argument('-l', '--load', dest='input_yaml', metavar="YAMLFILE",
                         help='yaml file defining a suite of input files')
@@ -152,7 +152,7 @@ def main():
             with f:
                 suite = yaml.safe_load(f)
                 args.input_files = suite['benchmark_analyses']
-    # If no yaml file is provided, a command line string (file name) is provided. Convert it to list.
+    # If no yaml file is provided, a command line string (file name) should be provided. Convert it to list.
     else:
         args.input_files = [args.input_files]
     

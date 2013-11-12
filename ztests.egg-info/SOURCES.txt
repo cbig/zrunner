@@ -10,4 +10,5 @@ ztests.egg-info/SOURCES.txt
 ztests.egg-info/dependency_links.txt
 ztests.egg-info/entry_points.txt
 ztests.egg-info/not-zip-safe
+ztests.egg-info/requires.txt
 ztests.egg-info/top_level.txt

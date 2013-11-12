@@ -18,10 +18,14 @@ setup(name='ztests',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          # -*- Extra requirements: -*-
+            "pyyaml",
+            "numpy",
+            "scipy",
+            "gdal"
       ],
       entry_points={
-                        'console_scripts':
-                              ['zrunner = ztests.runner:main']
-              },
-      )
+            'console_scripts': [
+                  'zrunner = ztests.runner:main'
+            ]
+      },
+)
