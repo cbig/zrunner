@@ -2,6 +2,7 @@ setup.cfg
 setup.py
 ztests/__init__.py
 ztests/parser.py
+ztests/reader.py
 ztests/runner.py
 ztests/tools.py
 ztests/utilities.py

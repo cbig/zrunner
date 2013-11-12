@@ -1,3 +1,4 @@
 [console_scripts]
+zreader = ztests.reader:main
 zrunner = ztests.runner:main
 

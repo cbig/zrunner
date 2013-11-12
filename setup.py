@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-import sys, os
 
 version = '0.1'
 
@@ -8,7 +7,7 @@ setup(name='ztests',
       description="Testing harness for Zonation outputs",
       long_description="""\
 """,
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      classifiers=[],
       keywords='zonation test cbig',
       author='Joona Lehtom\xc3\xa4ki',
       author_email='joona.lehtomaki@gmail.com',
@@ -18,14 +17,15 @@ setup(name='ztests',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-            "pyyaml",
-            "numpy",
-            "scipy",
-            "gdal"
+                  "pyyaml",
+                  "numpy",
+                  "scipy",
+                  "gdal"
       ],
       entry_points={
-            'console_scripts': [
-                  'zrunner = ztests.runner:main'
+                  'console_scripts': [
+                        'zrunner = ztests.runner:main',
+                        'zreader = ztests.reader:main'
             ]
       },
 )
