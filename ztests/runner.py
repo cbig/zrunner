@@ -101,7 +101,7 @@ def run_analysis(file_path, cmd_args):
     return elapsed_times
 
 
-def write_output(output_data, output_file=None, silent=False, print_width=80):
+def report_output(output_data, output_file=None, silent=False, print_width=80):
 
     if not silent:
         print(pad_header('SYSTEM INFO', print_width))
@@ -117,11 +117,11 @@ def write_output(output_data, output_file=None, silent=False, print_width=80):
                 print('{0}:'.format(key))
                 print('in seconds')
                 pprint(output_data[key], width=print_width)
-    if output_file:
+    if not silent and output_file:
         import yaml
         with open(output_file, 'w') as outfile:
             outfile.write(yaml.dump(output_data, canonical=True))
-        print('INFO: Wrote result data to {0}'.format(output_file))
+        print('\nINFO: Wrote results in file {0}'.format(output_file))
 
 
 def main():
@@ -139,6 +139,8 @@ def main():
                         help='name of the output file')
     parser.add_argument('-w', '--overwrite', dest='overwrite', default=False,
                         help='overwrite existing result file')
+    parser.add_argument('-s', '--silent', dest='silent', action='store_true',
+                        help='run everything silent')
 
     args = parser.parse_args()
 
@@ -157,10 +159,6 @@ def main():
             with f:
                 suite = yaml.safe_load(f)
                 args.input_files = suite['benchmark_analyses']
-    # If no yaml file is provided, a command line string (file name) should be
-    # provided. Convert it to list.
-    else:
-        args.input_files = [args.input_files]
 
     args.input_files = [os.path.join(os.path.abspath(__file__),
                         os.path.abspath(item)) for item in args.input_files]
@@ -175,22 +173,24 @@ def main():
     for file_path, _cmd_args in cmd_args.iteritems():
         output[file_path] = run_analysis(file_path, _cmd_args)
 
-    # Construct a suitable output name if it doesn't exist
-    if args.output_file == '':
-        uname0 = output['sys_info'][1]['Uname'][0]
-        uname1 = output['sys_info'][1]['Uname'][1]
-        args.output_file = ''.join('results_', uname0.lower(), '_',
-                                   uname1.replace('.', ''), '.yaml')
-        print('WARNING: No output file name provided,' +
-              ' using {0}'.format(args.output_file))
-
+    if not args.silent:
+        # Construct a suitable output name if it doesn't exist
+        if args.output_file == '':
+            uname0 = output['sys_info'][1]['Uname'][0]
+            uname1 = output['sys_info'][1]['Uname'][1]
+            args.output_file = ''.join(['results_', uname0.lower(), '_',
+                                        uname1.replace('.', ''), '.yaml'])
+            print('WARNING: No output file name provided,' +
+                  ' using {0}'.format(args.output_file))
         if not args.overwrite and os.path.exists(args.output_file):
             extant = args.output_file
             args.output_file = check_output_name(args.output_file)
             print('WARNING: Output file {0} exists, using {1}'.format(extant,
                   args.output_file))
 
-        write_output(output, args.output_file)
+    report_output(output, args.output_file, args.silent)
+
+    print('\nzrunner finished.\n')
 
 if __name__ == '__main__':
     main()

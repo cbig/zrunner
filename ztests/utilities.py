@@ -7,6 +7,14 @@ import platform
 from subprocess import Popen, PIPE
 
 
+class ZonationException(Exception):
+    def __init__(self, value):
+        self.parameter = value
+
+    def __str__(self):
+        return repr(self.parameter)
+
+
 def check_output_name(filename):
     ''' Checks for the existance of a given filename and creates a new and unused one if file
     already exists.
