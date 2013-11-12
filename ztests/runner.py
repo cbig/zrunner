@@ -8,8 +8,10 @@ from subprocess import Popen
 import sys
 import time
 
-from utilities import (check_output_name, get_system_info, get_zonation_info,
-                       pad_header)
+from ztests.utilities import (check_output_name, get_system_info,
+                              get_zonation_info, pad_header,
+                              ZonationRuninfoException)
+
 from ztests.parser import parse_results
 
 
@@ -95,7 +97,13 @@ def run_analysis(file_path, cmd_args):
     output_filepath = cmd_args[4].replace('.txt', '.run_info.txt')
     output_filepath = os.path.abspath(os.path.join(os.path.dirname(file_path),
                                                    output_filepath))
-    elapsed_times = parse_results(output_filepath)
+    try:
+        elapsed_times = parse_results(output_filepath)
+    except ZonationRuninfoException, e:
+        print('ERROR: {0}'.format(e))
+        elapsed_times = {}
+        elapsed_times['ERROR'] = str(e)
+
     elapsed_times['measured'] = round(total, 0)
 
     return elapsed_times
@@ -115,7 +123,6 @@ def report_output(output_data, output_file=None, silent=False, print_width=80):
         for key in keys:
             if key not in ['sys_info', 'z_info']:
                 print('{0}:'.format(key))
-                print('in seconds')
                 pprint(output_data[key], width=print_width)
     if not silent and output_file:
         import yaml
@@ -128,7 +135,7 @@ def main():
     parser = argparse.ArgumentParser(description='Run Zonation runs and' +
                                                  'performance benchmarks.')
 
-    parser.add_argument('input_files', metavar='INPUTS', type=str, nargs='+',
+    parser.add_argument('input_files', metavar='INPUTS', type=str, nargs='?',
                         help='input bat/sh file')
     parser.add_argument('-l', '--load', dest='input_yaml', metavar="YAMLFILE",
                         help='yaml file defining a suite of input files')
@@ -158,7 +165,10 @@ def main():
                 sys.exit(1)
             with f:
                 suite = yaml.safe_load(f)
-                args.input_files = suite['benchmark_analyses']
+                args.input_files = suite['test_runs']
+    elif not args.input_files:
+        parser.print_help()
+        sys.exit(2)
 
     args.input_files = [os.path.join(os.path.abspath(__file__),
                         os.path.abspath(item)) for item in args.input_files]

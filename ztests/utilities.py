@@ -7,7 +7,7 @@ import platform
 from subprocess import Popen, PIPE
 
 
-class ZonationException(Exception):
+class ZonationRuninfoException(Exception):
     def __init__(self, value):
         self.parameter = value
 
@@ -16,11 +16,11 @@ class ZonationException(Exception):
 
 
 def check_output_name(filename):
-    ''' Checks for the existance of a given filename and creates a new and unused one if file
-    already exists.
+    ''' Checks for the existance of a given filename and creates a new and
+    unused one if file already exists.
 
     @param filename String filename (abspath)
-    @retun filenmae String possibly altered filename (basename)
+    @return filename String possibly altered filename (basename)
     '''
 
     suffix = 1
@@ -28,8 +28,10 @@ def check_output_name(filename):
     while os.path.exists(filename):
         base = os.path.basename(filename)
         base = base.split('.')
-        if base[0].endswith('_{0}'.format(suffix - 1)):
-            new_base = base[0].replace('_{0}'.format(suffix - 1), '_{0}'.format(suffix)) + '.' + base[1]
+        prev_id = '_{0}'.format(suffix - 1)
+        cur_id = '_{0}'.format(suffix - 1)
+        if base[0].endswith(prev_id):
+            new_base = base[0].replace(prev_id, cur_id) + '.' + base[1]
         else:
             new_base = base[0] + '_{0}'.format(suffix) + '.' + base[1]
         filename = os.path.join(os.path.dirname(filename), new_base)
