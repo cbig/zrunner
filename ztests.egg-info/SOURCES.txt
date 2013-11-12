@@ -1,0 +1,9 @@
+setup.cfg
+setup.py
+ztests/__init__.py
+ztests.egg-info/PKG-INFO
+ztests.egg-info/SOURCES.txt
+ztests.egg-info/dependency_links.txt
+ztests.egg-info/entry_points.txt
+ztests.egg-info/not-zip-safe
+ztests.egg-info/top_level.txt

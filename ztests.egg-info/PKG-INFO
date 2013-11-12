@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: ztests
+Version: 0.1dev
+Summary: Testing harness for Zonation outputs
+Home-page: UNKNOWN
+Author: Joona Lehtomäki
+Author-email: joona.lehtomaki@gmail.com
+License: MIT
+Description: UNKNOWN
+Keywords: zonation test cbig
+Platform: UNKNOWN
