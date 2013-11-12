@@ -1,6 +1,10 @@
 setup.cfg
 setup.py
 ztests/__init__.py
+ztests/parser.py
+ztests/runner.py
+ztests/tools.py
+ztests/utilities.py
 ztests.egg-info/PKG-INFO
 ztests.egg-info/SOURCES.txt
 ztests.egg-info/dependency_links.txt
