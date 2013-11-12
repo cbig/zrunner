@@ -4,16 +4,18 @@
 import argparse
 import os
 from pprint import pprint
-from subprocess import Popen, PIPE
+from subprocess import Popen
 import sys
 import time
 
-from utilities import check_output_name, get_system_info, get_zonation_info, pad_header
+from utilities import (check_output_name, get_system_info, get_zonation_info,
+                       pad_header)
 from ztests.parser import parse_results
 
 
 def read_run(file_list, executable=None):
-    ''' Reads in the Zonation bat/sh files and return a dict of command sequences.
+    ''' Reads in the Zonation bat/sh files and return a dict of command
+    sequences.
 
     If an item in the list does not exist, it is removed from the file list.
 
@@ -33,8 +35,8 @@ def read_run(file_list, executable=None):
             file_list.remove(file_path)
             continue
 
-        # Read the input files and parse the Zonation call sequence. A single bat/sh file can
-        # have more than 1 row
+        # Read the input files and parse the Zonation call sequence. A single
+        # bat/sh file can have more than 1 row
         with f:
             content = f.readlines()
             for sequence in content:
@@ -88,10 +90,11 @@ def run_analysis(file_path, cmd_args):
 
     total = t1 - t0
 
-    # Get also the times reported by Zonation. Output name pattern is the 5th item in the bat/sh
-    # file
+    # Get also the times reported by Zonation. Output name pattern is the 5th
+    # item in the bat/sh file
     output_filepath = cmd_args[4].replace('.txt', '.run_info.txt')
-    output_filepath = os.path.abspath(os.path.join(os.path.dirname(file_path), output_filepath))
+    output_filepath = os.path.abspath(os.path.join(os.path.dirname(file_path),
+                                                   output_filepath))
     elapsed_times = parse_results(output_filepath)
     elapsed_times['measured'] = round(total, 0)
 
@@ -122,42 +125,45 @@ def write_output(output_data, output_file=None, silent=False, print_width=80):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Run Zonation performance benchmarks.')
+    parser = argparse.ArgumentParser(description='Run Zonation runs and' +
+                                                 'performance benchmarks.')
 
     parser.add_argument('input_files', metavar='INPUTS', type=str, nargs='+',
                         help='input bat/sh file')
     parser.add_argument('-l', '--load', dest='input_yaml', metavar="YAMLFILE",
                         help='yaml file defining a suite of input files')
+    parser.add_argument('-x', '--executable', dest='executable',
+                        default='zig3',
+                        help='select Zonation executable (must in PATH)')
     parser.add_argument('-o', '--outputfile', dest='output_file', default='',
                         help='name of the output file')
     parser.add_argument('-w', '--overwrite', dest='overwrite', default=False,
                         help='overwrite existing result file')
-    parser.add_argument('-x', '--executable', dest='executable', default='zig3',
-                        help='select Zonation executable (must in PATH)')
-    parser.add_argument('--no-benchmark', dest='benchmark', action='store_false',
-                        help='run just the run, do not perform the benchmark')
 
     args = parser.parse_args()
 
     if args.input_yaml:
         if args.input_files:
-            print('WARNING: Both positional input files and loadable yaml file defined. Using positional input files.')
+            print('WARNING: Both positional input files and loadable yaml ' +
+                  'file defined. Using positional input files.')
         else:
             import yaml
             try:
                 f = open(args.input_yaml, 'r')
             except IOError:
-                print('ERROR: Input YAML file {0} does not exist'.format(args.input_yaml))
+                print('ERROR: Input YAML file {0} does not ' +
+                      'exist'.format(args.input_yaml))
                 sys.exit(1)
             with f:
                 suite = yaml.safe_load(f)
                 args.input_files = suite['benchmark_analyses']
-    # If no yaml file is provided, a command line string (file name) should be provided. Convert it to list.
+    # If no yaml file is provided, a command line string (file name) should be
+    # provided. Convert it to list.
     else:
         args.input_files = [args.input_files]
-    
 
-    args.input_files = [os.path.join(os.path.abspath(__file__), os.path.abspath(item)) for item in args.input_files]
+    args.input_files = [os.path.join(os.path.abspath(__file__),
+                        os.path.abspath(item)) for item in args.input_files]
 
     cmd_args = read_run(args.input_files, args.executable)
 
@@ -169,19 +175,22 @@ def main():
     for file_path, _cmd_args in cmd_args.iteritems():
         output[file_path] = run_analysis(file_path, _cmd_args)
 
-    if args.benchmark:
-        # Construct a suitable output name if it doesn't exist
-        if args.output_file == '':
-            args.output_file = 'results_' + output['sys_info'][1]['Uname'][0].lower() + '_' + \
-                output['sys_info'][1]['Uname'][1].replace('.', '') + '.yaml'
-            print('WARNING: No output file name provided, using {0}'.format(args.output_file))
+    # Construct a suitable output name if it doesn't exist
+    if args.output_file == '':
+        uname0 = output['sys_info'][1]['Uname'][0]
+        uname1 = output['sys_info'][1]['Uname'][1]
+        args.output_file = ''.join('results_', uname0.lower(), '_',
+                                   uname1.replace('.', ''), '.yaml')
+        print('WARNING: No output file name provided,' +
+              ' using {0}'.format(args.output_file))
 
-            if not args.overwrite and os.path.exists(args.output_file):
-                extant = args.output_file
-                args.output_file = check_output_name(args.output_file)
-                print('WARNING: Output file {0} exists, using {1}'.format(extant, args.output_file))
+        if not args.overwrite and os.path.exists(args.output_file):
+            extant = args.output_file
+            args.output_file = check_output_name(args.output_file)
+            print('WARNING: Output file {0} exists, using {1}'.format(extant,
+                  args.output_file))
 
-            write_output(output, args.output_file)
+        write_output(output, args.output_file)
 
 if __name__ == '__main__':
     main()
