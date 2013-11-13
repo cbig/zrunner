@@ -4,7 +4,7 @@ version = '0.1'
 
 setup(name='zrunner',
       version=version,
-      description="Wrapper for running and benchmarking Zonation",
+      description="Utilities for running and benchmarking Zonation",
       long_description="""\
 """,
       classifiers=[],
