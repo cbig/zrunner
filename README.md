@@ -132,4 +132,10 @@ you can define the output file name using the `-o/--outputfile` switch.
 
 **Running a bat-file using different Zonation versions**
 
-**Just run the runs, no outputs**
+If you have several version of Zonation installed on your system you can define which one
+you want to use. If the Zonation executable is in our PATH, then you can use the short version.
+Oherwise a full path is needed. Here's how you run the same set of tutorial runs using `zig4`:
+
+```
+zrunner -l tests/ztests_basic.yaml -x zig4
+```
