@@ -10,14 +10,10 @@ way to build these CLI scripts is to use
 [batch files](http://en.wikipedia.org/wiki/Batch_file) - or bat-files - as 
 suggested in the Zonation manual. Bat-files are also the foundation of Zonation
 "projects" as they define the necessary configuration files and parameters
-for a particular run.
+for a particular run. However, bat-files cannot be used on other platforms 
+such as Linux. 
 
-However, bat-files cannot be used on other platforms such as Linux. **zrunner**
-solves this problem by providing simple wrapper utilities for running Zonation
-bat-files independent of the platform. Furthermore, the package records 
-additional information such as system information and time used for each run and
-outputs the information in a simple [YAML](http://yaml.org/)-file. In a 
-nutshell, zrunner is meant for:
+In a nutshell, zrunner is meant for:
 
 1. Running Zonation runs in a platform independent way
 2. Providing additional information on the run (Was the run successful? How long 
@@ -35,6 +31,9 @@ zrunner package includes two command line utilities:
 1. `zreader` for reporting the results produced by `zrunner`
 
 ## Install
+
+**WARNING** as `zrunner` has only reached version 0.1 be prepared for nothing
+to work and everything to change at later stage.
 
 #### Dependencies
 
@@ -77,3 +76,60 @@ python setup.py install
 ```
 
 ## Quick usage
+
+#### zrunner
+
+Quick roundup of available options:
+
+```
+usage: zrunner [-h] [-l YAMLFILE] [-x EXECUTABLE] [-o OUTPUT_FILE]
+               [-w OVERWRITE] [-s]
+               [INPUTS]
+
+Run Zonation runs andperformance benchmarks.
+
+positional arguments:
+  INPUTS                input bat/sh file
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -l YAMLFILE, --load YAMLFILE
+                        yaml file defining a suite of input files
+  -x EXECUTABLE, --executable EXECUTABLE
+                        select Zonation executable (must in PATH)
+  -o OUTPUT_FILE, --outputfile OUTPUT_FILE
+                        name of the output file
+  -w OVERWRITE, --overwrite OVERWRITE
+                        overwrite existing result file
+  -s, --silent          run everything silent
+
+```
+
+The following examples use [the basic Zonation tutorial runs](https://github.com/cbig/zonation-tutorial/tree/master/basic)
+and assume that you are located in folder `zonation-tutorial/basic`.
+
+**Running a bat file**
+
+Simply point a given bat-file to `zrunner`:
+
+```
+zrunner do_01_core_area_zonation.bat
+```
+
+Note that unless you use the silent switch `-s/--silent` an putput file will be 
+produced.
+
+**Running a suite of bat-files as defined in a YAML file**
+
+Run all the runs in the `tests` folder:
+
+```
+zrunner -l tests/ztests_basic.yaml
+```
+
+The output will be created in the same folder with name pattern `results_[YOUR_COMPUTER_NAME].yaml` or 
+you can define the output file name using the `-o/--outputfile` switch.
+
+**Running a bat-file using different Zonation versions**
+
+**Just run the runs, no outputs**
