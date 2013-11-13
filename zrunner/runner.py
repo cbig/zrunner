@@ -9,8 +9,8 @@ import sys
 import time
 
 from zrunner.utilities import (check_output_name, get_system_info,
-                              get_zonation_info, pad_header,
-                              ZonationRuninfoException)
+                               get_zonation_info, pad_header,
+                               ZonationRuninfoException)
 
 from zrunner.parser import parse_results
 
@@ -34,7 +34,6 @@ def read_run(file_list, executable=None):
             f = open(file_path, 'r')
         except IOError:
             print('WARNING: File {0} does not exist'.format(file_path))
-            file_list.remove(file_path)
             continue
 
         # Read the input files and parse the Zonation call sequence. A single
@@ -166,6 +165,27 @@ def main():
             with f:
                 suite = yaml.safe_load(f)
                 args.input_files = suite['test_runs']
+            # YAML file definitions can include relative paths that
+            # need to be dealt with.
+            relative_path = os.path.dirname(args.input_yaml)
+            if relative_path:
+                # Get the absolute path of the YAML file
+                full_yaml_path = os.path.abspath(args.input_yaml)
+                # Remove the relative YAML path from the absolute resulting
+                # in a parent path
+                parent_path = full_yaml_path.replace(args.input_yaml, '')
+                abs_paths = []
+                for input_file in args.input_files:
+                    # Get just the file name of a give path within the YAML
+                    # file
+                    file_name = os.path.basename(input_file)
+                    # Join the file name together with the parent path thus
+                    # fixing the relative path
+                    abs_path = os.path.join(parent_path,
+                                            file_name)
+                    abs_paths.append(abs_path)
+                args.input_files = abs_paths
+
     elif not args.input_files:
         parser.print_help()
         sys.exit(2)
@@ -176,7 +196,6 @@ def main():
 
     args.input_files = [os.path.join(os.path.abspath(__file__),
                         os.path.abspath(item)) for item in args.input_files]
-
 
     cmd_args = read_run(args.input_files, args.executable)
 
