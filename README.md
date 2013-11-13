@@ -33,8 +33,9 @@ zrunner package includes two command line utilities:
 
 #### Dependencies
 
-1. Install [pip](http://www.pip-installer.org/en/latest/) (needed only if installing using pip).
-2. Install [PyYAML](http://pyyaml.org/). NOTE: pip/setuptools will try to install this as 
+* Python 2.7+ (may work with older version as well, untested)
+* [pip](http://www.pip-installer.org/en/latest/) (needed only if installing using pip).
+* [PyYAML](http://pyyaml.org/). NOTE: pip/setuptools will try to install this as 
 well so this stage is optional. On some platforms `libyaml-dev` or similar is needed.
 
 #### Using pip
