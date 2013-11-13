@@ -31,4 +31,43 @@ zrunner package includes two command line utilities:
 
 ## Install
 
+#### Dependencies
+
+1. Install [pip](http://www.pip-installer.org/en/latest/) (needed only if installing using pip).
+2. Install [PyYAML](http://pyyaml.org/). NOTE: pip/setuptools will try to install this as 
+well so this stage is optional. On some platforms `libyaml-dev` or similar is needed.
+
+#### Using pip
+
+1. Install `zrunner` directly from [GitHub](https://github.com/cbig/zrunner) 
+using the following command (may need administrative privileges):  
+
+```
+pip install https://github.com/cbig/zrunner/archive/master.zip
+```
+
+#### Using git
+
+1. Clone the repository:
+```
+git clone https://github.com/cbig/zrunner.git
+```
+2. In the package folder, install the `zrunner` with the following command:
+
+```
+python setup.py install
+```
+
+#### Using bootstrapped setuptools
+
+This option is not very well tested. 
+
+1. Download the package from https://github.com/cbig/zrunner/archive/master.zip
+2. Unzip the folder
+3. In the package folder, install the `zrunner` with the following command:
+
+```
+python setup.py install
+```
+
 ## Quick usage
