@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 version = '0.1'
 
-setup(name='ztests',
+setup(name='zrunner',
       version=version,
-      description="Testing harness for Zonation outputs",
+      description="Wrapper for running and benchmarking Zonation",
       long_description="""\
 """,
       classifiers=[],
@@ -17,15 +17,11 @@ setup(name='ztests',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-                  "pyyaml",
-                  "numpy",
-                  "scipy",
-                  "gdal"
+                  "pyyaml"
       ],
-      entry_points={
-                  'console_scripts': [
-                        'zrunner = ztests.runner:main',
-                        'zreader = ztests.reader:main'
-            ]
-      },
-)
+      entry_points={'console_scripts': [
+                    'zrunner = ztests.runner:main',
+                    'zreader = ztests.reader:main'
+                    ]
+                    },
+      )
