@@ -1,4 +1,5 @@
-### zrunner - platfrom independent wrapper for running and benchmarking Zonation
+## zrunner 
+#### platfrom independent wrapper for running and benchmarking Zonation
 
 [Zonation](http://cbig.it.helsinki.fi/software/zonation/) conservation 
 prioritization software can be run using both a GUI and command line interface. 
@@ -11,7 +12,7 @@ suggested in the Zonation manual. Bat-files are also the foundation of Zonation
 "projects" as they define the necessary configuration files and parameters
 for a particular run.
 
-However, bat-files cannot be used on *nix platforms such as Linux. **zrunner**
+However, bat-files cannot be used on other platforms such as Linux. **zrunner**
 solves this problem by providing simple wrapper utilities for running Zonation
 bat-files independent of the platform. Furthermore, the package records 
 additional information such as system information and time used for each run and
@@ -28,6 +29,6 @@ zrunner package includes two command line utilities:
 1. `zrunner` for running the Zonation-files and generating records of the run 
 1. `zreader` for reporting the results produced by `zrunner`
 
-### Install
+## Install
 
-### Quick usage
+## Quick usage
