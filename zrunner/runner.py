@@ -170,7 +170,9 @@ def main():
         parser.print_help()
         sys.exit(2)
 
-    args.input_files = [args.input_files]
+    # Single argument is not a list, loading a YAML file will produce a list.
+    if not isinstance(args.input_files, list):
+        args.input_files = [args.input_files]
 
     args.input_files = [os.path.join(os.path.abspath(__file__),
                         os.path.abspath(item)) for item in args.input_files]
