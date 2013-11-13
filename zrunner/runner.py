@@ -170,8 +170,11 @@ def main():
         parser.print_help()
         sys.exit(2)
 
+    args.input_files = [args.input_files]
+
     args.input_files = [os.path.join(os.path.abspath(__file__),
                         os.path.abspath(item)) for item in args.input_files]
+
 
     cmd_args = read_run(args.input_files, args.executable)
 
