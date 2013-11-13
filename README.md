@@ -139,3 +139,52 @@ Oherwise a full path is needed. Here's how you run the same set of tutorial runs
 ```
 zrunner -l tests/ztests_basic.yaml -x zig4
 ```
+
+#### zreader
+
+Again, a quick roundup of available options:
+
+```
+usage: zreader [-h] INPUT
+
+Read ztests result file
+
+positional arguments:
+  INPUT       input yaml file
+
+optional arguments:
+  -h, --help  show this help message and exit
+
+```
+
+Not much there, huh? Basically `zreader` only reads in a given `zrunner` produced output
+YAML file and produces a summary report out of it. So far only printing is implemented.
+
+Reading the results from the single run (first example above) would look like this:
+
+```
+zreader results_[YOUR_COMPUTER_NAME].yaml
+
+
+** SYSTEM INFO ****************************************************************
+  Test run time: 2013-11-13T14:06:56.416638
+  Test computer: XXXXXXXX
+             OS: Linux
+         Kernel: 3.10.XXXXX
+   Architecture: x86_64
+
+
+Zonation version: 3.1.9
+
+
+** RUNS ***********************************************************************
+[do_01_core_area_zonation.bat]
+ Time to initialize (Zonation): 0 s
+  Cell removal time (Zonation): 0 s
+ Total elapsed time (Zonation): 3.0 s
+ Total measured time (zrunner): 3.0 s
+
+```
+Besides some system information the tool just reports that the run was completed 
+succesfully and the time spent on various stages. First 3 times reported are those
+measured by Zonation, the last (Total measured time) is measured by `zrunner`.
