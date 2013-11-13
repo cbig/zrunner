@@ -8,11 +8,11 @@ from subprocess import Popen
 import sys
 import time
 
-from ztests.utilities import (check_output_name, get_system_info,
+from zrunner.utilities import (check_output_name, get_system_info,
                               get_zonation_info, pad_header,
                               ZonationRuninfoException)
 
-from ztests.parser import parse_results
+from zrunner.parser import parse_results
 
 
 def read_run(file_list, executable=None):

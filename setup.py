@@ -22,8 +22,8 @@ setup(name='zrunner',
                   "pyyaml"
       ],
       entry_points={'console_scripts': [
-                    'zrunner = ztests.runner:main',
-                    'zreader = ztests.reader:main'
+                    'zrunner = zrunner.runner:main',
+                    'zreader = zrunner.reader:main'
                     ]
                     },
       )

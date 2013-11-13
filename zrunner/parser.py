@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import re
-from ztests.utilities import ZonationRuninfoException
+from zrunner.utilities import ZonationRuninfoException
 
 
 def parse_results(file_path):

@@ -1,7 +1,7 @@
 Metadata-Version: 1.0
 Name: zrunner
-Version: 0.1dev-20131112
-Summary: Testing harness for Zonation outputs
+Version: 0.1dev-20131113
+Summary: Utilities for running and benchmarking Zonation
 Home-page: UNKNOWN
 Author: Joona Lehtomäki
 Author-email: joona.lehtomaki@gmail.com
