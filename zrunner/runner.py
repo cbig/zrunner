@@ -62,6 +62,8 @@ def read_run(file_list, executable=None):
                     cmd_sequences[file_path] = sequence
 
     if cmd_sequences:
+        print(cmd_sequences)
+        exit(0)
         return cmd_sequences
     else:
         print('ERROR: None of the input files exist')
@@ -164,7 +166,7 @@ def main():
                 sys.exit(1)
             with f:
                 suite = yaml.safe_load(f)
-                args.input_files = suite['test_runs']
+                args.input_files = suite['runs']
             # YAML file definitions can include relative paths that
             # need to be dealt with.
             relative_path = os.path.dirname(args.input_yaml)
