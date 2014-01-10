@@ -62,8 +62,6 @@ def read_run(file_list, executable=None):
                     cmd_sequences[file_path] = sequence
 
     if cmd_sequences:
-        print(cmd_sequences)
-        exit(0)
         return cmd_sequences
     else:
         print('ERROR: None of the input files exist')
