@@ -202,7 +202,7 @@ def main():
     # Collect output to a dict
     output = {}
     output['sys_info'] = get_system_info()
-    output['z_info'] = get_zonation_info()
+    output['z_info'] = get_zonation_info(args.executable)
 
     for file_path, _cmd_args in cmd_args.iteritems():
         output[file_path] = run_analysis(file_path, _cmd_args)

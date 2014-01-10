@@ -57,14 +57,14 @@ def get_system_info():
     return sys_info
 
 
-def get_zonation_info():
+def get_zonation_info(executable='zig3'):
     ''' Function to retrieve Zonation version info.
 
     NOTE: Zonation must be in PATH.
 
     @return tuple Zonation version number
     '''
-    version = Popen(['zig3', '-v'], stdout=PIPE)
+    version = Popen([executable, '-v'], stdout=PIPE)
     version = version.communicate()[0]
     version = version.split('\n')[0].strip()
     version = version.split(':')[1].strip()
