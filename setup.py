@@ -19,7 +19,8 @@ setup(name='zrunner',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-                  "pyyaml"
+                  "pyyaml",
+                  "slackpy>=0.1.4"
       ],
       dependency_links = ['https://github.com/jlehtoma/slackpy/tarball/master#egg=slackpy-0.1.4'],
       entry_points={'console_scripts': [
