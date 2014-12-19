@@ -8,7 +8,7 @@ from subprocess import Popen
 import sys
 import time
 
-from zrunner.utilities import (check_output_name, get_system_info,
+from zrunner.utilities import (check_output_name, display_time, get_system_info,
                                get_zonation_info, pad_header,
                                ZonationRuninfoException)
 
@@ -139,7 +139,7 @@ def main():
     parser.add_argument('-l', '--load', dest='input_yaml', metavar="YAMLFILE",
                         help='yaml file defining a suite of input files')
     parser.add_argument('-x', '--executable', dest='executable',
-                        default='zig3',
+                        default='zig4',
                         help='select Zonation executable (must in PATH)')
     parser.add_argument('-o', '--outputfile', dest='output_file', default='',
                         help='name of the output file')
@@ -147,8 +147,12 @@ def main():
                         help='overwrite existing result file')
     parser.add_argument('-s', '--silent', dest='silent', action='store_true',
                         help='run everything silent')
+    parser.add_argument('--slack-config', dest='slack_config', default='',
+                        help='Slack configuration file')
 
     args = parser.parse_args()
+
+    slack_log = False
 
     if args.input_yaml:
         if args.input_files:
@@ -199,13 +203,61 @@ def main():
 
     cmd_args = read_run(args.input_files, args.executable)
 
+    # Notify to slack if configured
+    if args.slack_config:
+        import slackpy
+        import yaml
+        try:
+            f = open(args.slack_config, 'r')
+            with f:
+                slack_config = yaml.safe_load(f)
+                slack_log = True
+
+                if 'WEBHOOK_URL' not in slack_config.keys():
+                    print('ERROR: Slack configuration file does not have WEBHOOK_URL defined')
+                    print('Slack notifications will not be enabled.')
+                    slack_log = False
+                elif 'CHANNEL' not in slack_config.keys():
+                    print('ERROR: Slack configuration file does not have CHANNEL defined')
+                    print('Slack notifications will not be enabled.')
+                    slack_log = False
+                else:
+                    WEBHOOK_URL = slack_config['WEBHOOK_URL']
+                    CHANNEL = slack_config['CHANNEL']
+                    USER_NAME = 'zlogger'
+                    # Create a new logger instance.
+                    slack_logger = slackpy.SlackLogger(WEBHOOK_URL, CHANNEL, USER_NAME)
+        except IOError:
+            print('ERROR: Input Slack configuration YAML file {0} does not exist'.format(args.slack_config))
+            print('Slack notifications will not be enabled.')
+
     # Collect output to a dict
     output = {}
     output['sys_info'] = get_system_info()
     output['z_info'] = get_zonation_info(args.executable)
 
+    if slack_log:
+        z_version = '-'.join(output['z_info'])
+        sys_name = '{0} ({1})'.format(output['sys_info'][1]['Uname'][1], output['sys_info'][1]['Uname'][0])
+        sys_time = output['sys_info'][0]['Report time']
+        msg = 'Starting runs using Zonation version <{0}> on {1} at {2}'.format(z_version, sys_name, sys_time)
+        slack_logger.info(title='Initializing runs', message=msg)
+
+    # Run the actual analyses
+    run_no = 1
     for file_path, _cmd_args in cmd_args.iteritems():
+        if slack_log:
+            run_name = os.path.basename(file_path).split('.')[0]
+            slack_logger.info(title='Run {0} [{1}/{2}]'.format(run_name, run_no, len(cmd_args)), 
+                              message='Starting run')
+
         output[file_path] = run_analysis(file_path, _cmd_args)
+        
+        if slack_log:
+            slack_logger.info(title='Run {0} [{1}/{2}]'.format(run_name, run_no, len(cmd_args)), 
+                              message='Run {0} finished in {1}'.format(run_name, display_time(output[file_path]['measured'])))
+
+        run_no += 1
 
     if not args.silent:
         # Construct a suitable output name if it doesn't exist
