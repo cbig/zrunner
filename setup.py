@@ -21,6 +21,7 @@ setup(name='zrunner',
       install_requires=[
                   "pyyaml"
       ],
+      dependency_links = ['https://github.com/jlehtoma/slackpy/tarball/master#egg=slackpy-0.1.4'],
       entry_points={'console_scripts': [
                     'zrunner = zrunner.runner:main',
                     'zreader = zrunner.reader:main'
