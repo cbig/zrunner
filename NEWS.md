@@ -1,4 +1,4 @@
-## 0.1.4
+## 0.1.1
 
 + Executable defaults to `zig4`
 
