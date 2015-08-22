@@ -11,5 +11,6 @@ ztools.egg-info/SOURCES.txt
 ztools.egg-info/dependency_links.txt
 ztools.egg-info/entry_points.txt
 ztools.egg-info/not-zip-safe
+ztools.egg-info/pbr.json
 ztools.egg-info/requires.txt
 ztools.egg-info/top_level.txt
