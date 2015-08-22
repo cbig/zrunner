@@ -9,23 +9,24 @@ import sys
 import time
 
 from ztools.utilities import (check_output_name, display_time, get_system_info,
-                               get_zonation_info, pad_header,
-                               ZonationRuninfoException)
+                              get_zonation_info, pad_header,
+                              ZonationRuninfoException)
 
 from ztools.parser import parse_results
 
 
 def read_run(file_list, executable=None):
-    ''' Reads in the Zonation bat/sh files and return a dict of command
+    """Reads in the Zonation bat/sh files and return a dict of command
     sequences.
 
     If an item in the list does not exist, it is removed from the file list.
 
     @param file_list String list of input file paths
     @param executable String for overriding executable
-    @return cmd_sequences list of comman sequences
+    @return cmd_sequences list of common sequences
 
-    '''
+    """
+
     cmd_sequences = {}
 
     for file_path in file_list:
@@ -73,15 +74,16 @@ def run_suite():
 
 
 def run_analysis(file_path, cmd_args):
-    ''' Zonation analysis runner.
+    """Zonation analysis runner.
 
     Runs a single analysis based on parsed arguments.
 
-    @param name String name of the analysis being run
+    @param file_path String path to the location where the bat
+      file is located
     @param cmd_args list of Zonation command line arguments
 
     @return elapsed_times dict of seconds of analysis runtime
-    '''
+    """
 
     t0 = time.time()
     p = Popen(cmd_args, cwd=os.path.dirname(file_path))
@@ -100,8 +102,7 @@ def run_analysis(file_path, cmd_args):
         elapsed_times = parse_results(output_filepath)
     except ZonationRuninfoException, e:
         print('ERROR: {0}'.format(e))
-        elapsed_times = {}
-        elapsed_times['ERROR'] = str(e)
+        elapsed_times = {'ERROR': str(e)}
 
     elapsed_times['measured'] = round(total, 0)
 
@@ -222,18 +223,17 @@ def main():
                     print('Slack notifications will not be enabled.')
                     slack_log = False
                 else:
-                    WEBHOOK_URL = slack_config['WEBHOOK_URL']
-                    CHANNEL = slack_config['CHANNEL']
-                    USER_NAME = 'zlogger'
+                    webhook_url = slack_config['WEBHOOK_URL']
+                    channel = slack_config['CHANNEL']
+                    user_name = 'zlogger'
                     # Create a new logger instance.
-                    slack_logger = slackpy.SlackLogger(WEBHOOK_URL, CHANNEL, USER_NAME)
+                    slack_logger = slackpy.SlackLogger(webhook_url, channel, user_name)
         except IOError:
             print('ERROR: Input Slack configuration YAML file {0} does not exist'.format(args.slack_config))
             print('Slack notifications will not be enabled.')
 
     # Collect output to a dict
-    output = {}
-    output['sys_info'] = get_system_info()
+    output = {'sys_info': get_system_info()}
     output['z_info'] = get_zonation_info(args.executable)
 
     if slack_log:
@@ -255,7 +255,8 @@ def main():
         
         if slack_log:
             slack_logger.info(title='Run {0} [{1}/{2}]'.format(run_name, run_no, len(cmd_args)), 
-                              message='Run {0} finished in {1}'.format(run_name, display_time(output[file_path]['measured'])))
+                              message='Run {0} finished in {1}'.format(run_name,
+                                                                       display_time(output[file_path]['measured'])))
 
         run_no += 1
 
