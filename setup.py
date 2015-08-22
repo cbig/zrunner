@@ -2,9 +2,9 @@ from ez_setup import use_setuptools
 use_setuptools()
 from setuptools import setup, find_packages
 
-version = '0.1'
+version = '0.2'
 
-setup(name='zrunner',
+setup(name='ztools',
       version=version,
       description="Utilities for running and benchmarking Zonation",
       long_description="""\
@@ -22,8 +22,8 @@ setup(name='zrunner',
                   "pyyaml"
       ],
       entry_points={'console_scripts': [
-                    'zrunner = zrunner.runner:main',
-                    'zreader = zrunner.reader:main'
+                    'zrunner = ztools.runner:main',
+                    'zreader = ztools.reader:main'
                     ]
                     },
       )

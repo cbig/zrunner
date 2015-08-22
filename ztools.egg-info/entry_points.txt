@@ -1,0 +1,4 @@
+[console_scripts]
+zreader = ztools.reader:main
+zrunner = ztools.runner:main
+
