@@ -1,0 +1,2 @@
+pyyaml
+slackpy>=0.1.4

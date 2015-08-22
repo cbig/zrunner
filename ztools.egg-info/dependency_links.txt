@@ -1,1 +1,1 @@
-
+https://github.com/jlehtoma/slackpy/tarball/master#egg=slackpy-0.1.4

@@ -78,3 +78,26 @@ def pad_header(msg, print_width):
     # - 4 is for 2 leading stars and 2 whitespaces
     nstars = print_width - len(msg) - 4
     return '\n** ' + msg + ' ' + '*' * nstars
+
+def display_time(seconds, granularity=2):
+    ''' Get input time in seconds and convert into more convenient time formats.
+    '''
+    
+    intervals = (
+    ('weeks', 604800),  # 60 * 60 * 24 * 7
+    ('days', 86400),    # 60 * 60 * 24
+    ('hours', 3600),    # 60 * 60
+    ('minutes', 60),
+    ('seconds', 1),
+    )
+    
+    result = []
+
+    for name, count in intervals:
+        value = seconds // count
+        if value:
+            seconds -= value * count
+            if value == 1:
+                name = name.rstrip('s')
+            result.append("{} {}".format(value, name))
+    return ', '.join(result[:granularity])
