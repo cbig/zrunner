@@ -3,6 +3,7 @@ setup.py
 ztools/__init__.py
 ztools/parser.py
 ztools/reader.py
+ztools/renamer.py
 ztools/runner.py
 ztools/tools.py
 ztools/utilities.py
