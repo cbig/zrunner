@@ -25,7 +25,8 @@ setup(name='ztools',
       dependency_links = ['https://github.com/jlehtoma/slackpy/tarball/master#egg=slackpy-0.1.4'],
       entry_points={'console_scripts': [
                     'zrunner = ztools.runner:main',
-                    'zreader = ztools.reader:main'
+                    'zreader = ztools.reader:main',
+                    'zrenamer = ztools.renamer:main'
                     ]
                     },
       )

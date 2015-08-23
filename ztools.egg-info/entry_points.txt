@@ -1,4 +1,6 @@
 [console_scripts]
 zreader = ztools.reader:main
+zrenamer = ztools.renamer:main
 zrunner = ztools.runner:main
+
 
