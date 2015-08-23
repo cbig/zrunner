@@ -53,10 +53,8 @@ class ZRenamer(object):
 def main():
     parser = argparse.ArgumentParser(description='Rename Zonation variants')
 
-    parser.add_argument('source_name', metavar='SRC_NAME', type=str,
-                        help='Current variant name to be renamed')
-    parser.add_argument('destination_name', metavar='DST_NAME', type=str,
-                        help='New name')
+    parser.add_argument('source_name', metavar='SRC_NAME', type=str, help='Current variant name to be renamed')
+    parser.add_argument('destination_name', metavar='DST_NAME', type=str, help='New name')
     parser.add_argument('-v', '--verbose', action='store_true', dest='verbose', default=False,
                         help='Enable verbose logging')
 
