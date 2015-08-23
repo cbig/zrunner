@@ -55,10 +55,12 @@ def main():
 
     parser.add_argument('source_name', metavar='SRC_NAME', type=str, help='Current variant name to be renamed')
     parser.add_argument('destination_name', metavar='DST_NAME', type=str, help='New name')
+    parser.add_argument('-d', '--dir', metavar='DIR', nargs='?', type=str, default=os.getcwd(),
+                        help='Path to search directory')
     parser.add_argument('-v', '--verbose', action='store_true', dest='verbose', default=False,
                         help='Enable verbose logging')
 
     args = parser.parse_args()
 
-    renamer = ZRenamer(args.source_name, verbose=args.verbose)
+    renamer = ZRenamer(args.source_name, dir=args.dir, verbose=args.verbose)
     #renamer.rename(args.destination_name)
