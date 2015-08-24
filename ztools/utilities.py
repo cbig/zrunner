@@ -144,3 +144,44 @@ def pad_header(msg, print_width, char='*'):
     nstars = print_width - len(msg) - 4
     return '\n{0}{1} '.format(char, char) + msg + ' ' + char * nstars
 
+
+def parse_bat(bat_file):
+    """ Parse Zonation bat-file.
+
+    :param bat_file: String path to the bat-file to be parsed.
+    :return: dict containing the parsed values.
+    """
+
+    cmd_components = {}
+
+    with open(bat_file, 'r') as f:
+        read_data = f.readlines()
+
+        # NOTE: for now it assumed that each bat-file only has 1 line.
+        if len(read_data) > 1:
+            print('WARNING: bat-file {0} has more than 1 line, using only the first line'.format(bat_file))
+        read_data = read_data[0]
+        read_data = read_data.replace('\r', '')
+        read_data = read_data.replace('\n', '')
+        read_data = read_data.split(' ')
+
+        # Assume a length of 10
+        if len(read_data) != 10:
+            print('WARNING: number of command components in bat-file {0} != 10, results may be wrong'.format(bat_file))
+
+        try:
+            # Get the individual command components
+            cmd_components['command'] = read_data[0]
+            cmd_components['executable'] = read_data[1]
+            cmd_components['run_type'] = read_data[2]
+            cmd_components['dat_file'] = read_data[3]
+            cmd_components['spp_file'] = read_data[4]
+            cmd_components['output'] = read_data[5]
+            cmd_components['uncert_alpha'] = read_data[6]
+            cmd_components['ds'] = read_data[7]
+            cmd_components['aplha_multip'] = read_data[8]
+            cmd_components['close_window'] = read_data[9]
+        except IndexError, e:
+            print('ERROR: bat-file has unusual content')
+
+    return cmd_components
