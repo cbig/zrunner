@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import glob
 import os
 import platform
 from subprocess import Popen, PIPE
-
+import sys
 
 class ZonationRuninfoException(Exception):
     def __init__(self, value):
@@ -72,6 +73,27 @@ def display_time(seconds, granularity=2):
                 name = name.rstrip('s')
             result.append("{} {}".format(value, name))
     return ', '.join(result[:granularity])
+
+
+def find_file(filename, search_dir):
+    """Search for a file in a directory.
+
+    :param filename: String filename to be searched.
+    :param search_dir: String path to the directory to be searched.
+    :return: String path to match, else None.
+    """
+
+    # NOTE: Matching here allows for characters before but not after the match
+    target_file = glob.glob(os.path.join(search_dir, filename))
+    if len(target_file) == 0:
+        print('ERROR: File {0} not found in directory {1}'.format(filename, os.path.abspath(search_dir)))
+        sys.exit(-1)
+    elif len(target_file) > 1:
+        print('WARNING: More than one matching bat file found, using the first match {0}'.format(target_file[0]))
+
+    target_file = target_file[0]
+
+    return target_file
 
 
 def get_system_info():

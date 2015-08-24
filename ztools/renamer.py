@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import glob
 import os
-import sys
+
+from ztools.utilities import find_file
+
 
 class ZRenamer(object):
     """ ZRenamer class for renaming Zonation variants.
@@ -12,7 +13,7 @@ class ZRenamer(object):
     The functionality of this class' instances is restricted to replacing  variant name Strings in various places.
     """
 
-    def __init__(self, variant_name, dir = '.', verbose = False):
+    def __init__(self, variant_name, search_dir='.', verbose=False):
         """ Instantiate the class based on the original variant name.
 
         It is assumed that the variant has the following mandatory components:
@@ -26,26 +27,21 @@ class ZRenamer(object):
 
         The directories above may have arbitrarily complex path specification.
 
-        @param variant_name String original name of the variant.
-        @param dir String path to the directory to be searched (default: '.').
-        @param verbose boolean setting verbose logging.
+        :param variant_name: String original name of the variant.
+        :param search_dir: String path to the directory to be searched (default: '.').
+        :param verbose: boolean setting verbose logging.
         """
 
-        # Inititate instance attributes
+        # Initiate instance attributes
         self.variant_name = variant_name
 
-        # Try locating the needed file
-        # NOTE: Matching here allows for characters before but not after the match
-        self.bat_file = glob.glob(os.path.join(dir, '*{0}.bat'.format(variant_name)))
-        if len(self.bat_file) == 0:
-            print('ERROR: No bat-file found for variant {0} in directory {1}'.format(variant_name,
-                                                                                     os.path.abspath(dir)))
-            sys.exit(-1)
-        elif len(self.bat_file) > 1:
-            print('WARNING: More than one matching bat file found, using the first match {0}'.format(self.bat_file[0]))
+        # Try locating the needed files
+        self.bat_file = find_file('*{0}.bat'.format(variant_name), search_dir)
+        if self.bat_file and verbose:
+            print("INFO: Found bat-file {0}".format(self.bat_file))
 
-        self.bat_file = self.bat_file[0]
-        if verbose:
+        self.bat_file = find_file('*{0}.bat'.format(variant_name), search_dir)
+        if self.bat_file and verbose:
             print("INFO: Found bat-file {0}".format(self.bat_file))
 
 
@@ -57,10 +53,12 @@ def main():
     parser.add_argument('destination_name', metavar='DST_NAME', type=str, help='New name')
     parser.add_argument('-d', '--dir', metavar='DIR', nargs='?', type=str, default=os.getcwd(),
                         help='Path to search directory')
+    parser.add_argument('-k', '--keep', action='store_true', dest='keep', default=False,
+                        help='Keep original')
     parser.add_argument('-v', '--verbose', action='store_true', dest='verbose', default=False,
                         help='Enable verbose logging')
 
     args = parser.parse_args()
 
-    renamer = ZRenamer(args.source_name, dir=args.dir, verbose=args.verbose)
+    renamer = ZRenamer(args.source_name, search_dir=args.dir, verbose=args.verbose)
     #renamer.rename(args.destination_name)
