@@ -16,12 +16,13 @@ class ZonationRuninfoException(Exception):
 
 
 def check_output_name(filename):
-    ''' Checks for the existance of a given filename and creates a new and
+    """ Checks for the existence of a given filename and creates a new and
     unused one if file already exists.
 
-    @param filename String filename (abspath)
-    @return filename String possibly altered filename (basename)
-    '''
+    :param filename: String filename (abspath)
+
+    :return filename: String possibly altered filename (basename)
+    """
 
     suffix = 1
 
@@ -40,11 +41,44 @@ def check_output_name(filename):
     return filename
 
 
-def get_system_info():
-    ''' Function to retrieve system related information.
+def display_time(seconds, granularity=2):
+    """ Get input time in seconds and convert into more convenient time formats.
 
-    @return list of system variables
-    '''
+    :param seconds: int number of seconds to be converted.
+    :param granularity: int (>1) controlling the components returned. E.g.
+      >>> display_time(133300)
+      '1 day, 13 hours'
+      >>> display_time(133300, granularity=4)
+      '1 day, 13 hours, 1 minute, 40 seconds'
+
+    :return String representation of the time provided.
+    """
+
+    intervals = (
+    ('weeks', 604800),  # 60 * 60 * 24 * 7
+    ('days', 86400),    # 60 * 60 * 24
+    ('hours', 3600),    # 60 * 60
+    ('minutes', 60),
+    ('seconds', 1),
+    )
+
+    result = []
+
+    for name, count in intervals:
+        value = seconds // count
+        if value:
+            seconds -= value * count
+            if value == 1:
+                name = name.rstrip('s')
+            result.append("{} {}".format(value, name))
+    return ', '.join(result[:granularity])
+
+
+def get_system_info():
+    """ Function to retrieve system related information.
+
+    :return list of system variables
+    """
     sys_info = []
     sys_info.append({'Report time': datetime.datetime.now().isoformat()})
     sys_info.append({'Uname': platform.uname()})
@@ -57,13 +91,15 @@ def get_system_info():
     return sys_info
 
 
-def get_zonation_info(executable='zig3'):
-    ''' Function to retrieve Zonation version info.
+def get_zonation_info(executable='zig4'):
+    """ Function to retrieve Zonation version info.
 
     NOTE: Zonation must be in PATH.
 
-    @return tuple Zonation version number
-    '''
+    :param executable: String name of the Zonation executable (default: 'zig4').
+
+    :return tuple Zonation version number
+    """
     version = Popen([executable, '-v'], stdout=PIPE)
     version = version.communicate()[0]
     version = version.split('\n')[0].strip()
@@ -73,31 +109,16 @@ def get_zonation_info(executable='zig3'):
     return version
 
 
-def pad_header(msg, print_width):
+def pad_header(msg, print_width, char='*'):
+    """ Pad a given message with given character.
+
+    :param msg: String message to be padded with '*'
+    :param print_width: int number defining the print width
+    :param char: Character used for padding (default: '*').
+    :return: String padded message.
+    """
 
     # - 4 is for 2 leading stars and 2 whitespaces
     nstars = print_width - len(msg) - 4
-    return '\n** ' + msg + ' ' + '*' * nstars
+    return '\n{0}{1} '.format(char, char) + msg + ' ' + char * nstars
 
-def display_time(seconds, granularity=2):
-    ''' Get input time in seconds and convert into more convenient time formats.
-    '''
-    
-    intervals = (
-    ('weeks', 604800),  # 60 * 60 * 24 * 7
-    ('days', 86400),    # 60 * 60 * 24
-    ('hours', 3600),    # 60 * 60
-    ('minutes', 60),
-    ('seconds', 1),
-    )
-    
-    result = []
-
-    for name, count in intervals:
-        value = seconds // count
-        if value:
-            seconds -= value * count
-            if value == 1:
-                name = name.rstrip('s')
-            result.append("{} {}".format(value, name))
-    return ', '.join(result[:granularity])
