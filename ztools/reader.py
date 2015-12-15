@@ -64,7 +64,7 @@ class ZReader(object):
                                            run_info['measured'],
                                            title_lenght=30) + ' s')
 
-                print(self._pad_string('Total measured time (zrunner)',
+                print(self._pad_string('Total measured time (ztools)',
                                        run_info['measured'],
                                        title_lenght=30) + ' s')
                 print('\n')

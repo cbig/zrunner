@@ -8,11 +8,11 @@ from subprocess import Popen
 import sys
 import time
 
-from zrunner.utilities import (check_output_name, display_time, get_system_info,
+from ztools.utilities import (check_output_name, display_time, get_system_info,
                                get_zonation_info, pad_header,
                                ZonationRuninfoException)
 
-from zrunner.parser import parse_results
+from ztools.parser import parse_results
 
 
 def read_run(file_list, executable=None):
@@ -93,7 +93,7 @@ def run_analysis(file_path, cmd_args):
 
     # Get also the times reported by Zonation. Output name pattern is the 5th
     # item in the bat/sh file
-    output_filepath = cmd_args[4].replace('.txt', '.run_info.txt')
+    output_filepath = cmd_args[4]
     output_filepath = os.path.abspath(os.path.join(os.path.dirname(file_path),
                                                    output_filepath))
     try:
