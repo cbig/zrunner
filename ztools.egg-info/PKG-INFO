@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: ztools
-Version: 0.1dev-20150225
+Version: 0.2dev-20151215
 Summary: Utilities for running and benchmarking Zonation
 Home-page: UNKNOWN
 Author: Joona Lehtomäki
@@ -9,4 +9,3 @@ License: MIT
 Description: UNKNOWN
 Keywords: zonation test cbig
 Platform: UNKNOWN
-
