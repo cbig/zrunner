@@ -1,0 +1,8 @@
+name: ztools
+channels:
+  - defaults
+dependencies:
+  - python>=3.5
+  - yaml
+  - pip:
+      - slackpy
