@@ -98,7 +98,7 @@ def run_analysis(file_path, cmd_args):
                                                    output_filepath))
     try:
         elapsed_times = parse_results(output_filepath)
-    except ZonationRuninfoException, e:
+    except ZonationRuninfoException as e:
         print('ERROR: {0}'.format(e))
         elapsed_times = {}
         elapsed_times['ERROR'] = str(e)
