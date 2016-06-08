@@ -65,7 +65,7 @@ def get_zonation_info(executable='zig3'):
     @return tuple Zonation version number
     '''
     version = Popen([executable, '-v'], stdout=PIPE)
-    version = version.communicate()[0]
+    version, errs = version.communicate()[0]
     version = version.split('\n')[0].strip()
     version = version.split(':')[1].strip()
     version = tuple(version.split('.'))
